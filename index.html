@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ Архетипов Личности</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent-gold: #d4af37;
+            --accent-orange: #ff6b35;
+            --accent-teal: #4ecdc4;
+            --text-light: #f5f5f5;
+            --text-muted: #b8b8b8;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--primary);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 6rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .top-archetypes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .archetype-card {
+            background: var(--secondary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .archetype-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-gold);
+        }
+
+        .archetype-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .archetype-card.hero-card::before { background: var(--gradient-2); }
+        .archetype-card.lover-card::before { background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%); }
+        .archetype-card.ruler-card::before { background: linear-gradient(135deg, #d4af37 0%, #f4e285 100%); }
+
+        .archetype-score {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .archetype-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .archetype-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .archetype-description {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .chart-container {
+            background: var(--secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            animation: slideInRight 0.8s ease-out backwards;
+        }
+
+        .chart-bar:nth-child(1) { animation-delay: 0.1s; }
+        .chart-bar:nth-child(2) { animation-delay: 0.2s; }
+        .chart-bar:nth-child(3) { animation-delay: 0.3s; }
+        .chart-bar:nth-child(4) { animation-delay: 0.4s; }
+        .chart-bar:nth-child(5) { animation-delay: 0.5s; }
+        .chart-bar:nth-child(6) { animation-delay: 0.6s; }
+        .chart-bar:nth-child(7) { animation-delay: 0.7s; }
+        .chart-bar:nth-child(8) { animation-delay: 0.8s; }
+        .chart-bar:nth-child(9) { animation-delay: 0.9s; }
+        .chart-bar:nth-child(10) { animation-delay: 1s; }
+        .chart-bar:nth-child(11) { animation-delay: 1.1s; }
+        .chart-bar:nth-child(12) { animation-delay: 1.2s; }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .chart-label {
+            min-width: 140px;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .chart-bar-bg {
+            flex: 1;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 1rem;
+            font-weight: 600;
+            transition: width 1s ease-out 0.3s;
+        }
+
+        .chart-bar-fill.high { background: var(--gradient-2); }
+        .chart-bar-fill.medium { background: var(--gradient-3); }
+
+        .chart-score {
+            margin-left: 1rem;
+            font-weight: 600;
+            min-width: 40px;
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .insight-card {
+            background: var(--secondary);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border-left: 4px solid var(--accent-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateX(10px);
+        }
+
+        .insight-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .insight-text {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 107, 53, 0.1) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 4rem;
+        }
+
+        .recommendations h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-gold);
+        }
+
+        .recommendation-list {
+            list-style: none;
+        }
+
+        .recommendation-list li {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-orange);
+            transition: background 0.3s ease;
+        }
+
+        .recommendation-list li:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .recommendation-list strong {
+            color: var(--accent-gold);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 40vh;
+                padding: 3rem 1rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .top-archetypes {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-label {
+                min-width: 100px;
+                font-size: 0.9rem;
+            }
+
+            .insight-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Архетипический Профиль</h1>
+            <p class="subtitle">Глубинный анализ вашей личности через призму 12 юнгианских архетипов</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Top 3 Archetypes -->
+        <section class="section">
+            <h2 class="section-title">Ваши Доминирующие Архетипы</h2>
+            <p class="section-subtitle">Три самых сильных архетипа, определяющих ваше мировоззрение и поведение</p>
+            
+            <div class="top-archetypes">
+                <div class="archetype-card hero-card">
+                    <div class="archetype-score">29</div>
+                    <h3 class="archetype-name">Герой</h3>
+                    <p class="archetype-subtitle">The Warrior • Воин</p>
+                    <p class="archetype-description">
+                        Вы ориентированы на достижения и преодоление препятствий. Для вас жизнь — это поле битвы, где вы доказываете свою ценность через мужественные действия. Вы стремитесь сделать мир лучше, не боясь трудностей и вызовов.
+                    </p>
+                </div>
+
+                <div class="archetype-card lover-card">
+                    <div class="archetype-score">29</div>
+                    <h3 class="archetype-name">Любовник</h3>
+                    <p class="archetype-subtitle">The Lover • Романтик</p>
+                    <p class="archetype-description">
+                        Вы цените красоту, близость и глубокие эмоциональные связи. Стремитесь к интимности в отношениях и хотите не просто хорошо выглядеть, но и быть привлекательным. Ваша жизнь наполнена страстью и желанием дарить любовь.
+                    </p>
+                </div>
+
+                <div class="archetype-card ruler-card">
+                    <div class="archetype-score">28</div>
+                    <h3 class="archetype-name">Правитель</h3>
+                    <p class="archetype-subtitle">The Ruler • Лидер</p>
+                    <p class="archetype-description">
+                        Вы знаете, что лучший способ избежать хаоса — взять все под контроль. Берёте на себя руководящую роль и стремитесь создать процветающее сообщество. Ваша цель — создание успешной семьи, компании или общества.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Full Chart -->
+        <section class="section">
+            <h2 class="section-title">Полный Архетипический Профиль</h2>
+            <p class="section-subtitle">Ваши баллы по всем 12 архетипам</p>
+            
+            <div class="chart-container">
+                <div class="chart-bar">
+                    <div class="chart-label">Герой</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill high" style="width: 96.67%">29</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Любовник</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill high" style="width: 96.67%">29</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Правитель</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill high" style="width: 93.33%">28</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Творец</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill high" style="width: 86.67%">26</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Маг</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill medium" style="width: 76.67%">23</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Искатель</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill medium" style="width: 70%">21</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Мудрец</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill medium" style="width: 70%">21</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Шут</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill medium" style="width: 66.67%">20</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Заботливый</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill medium" style="width: 63.33%">19</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Простодушный</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill" style="width: 60%">18</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Бунтарь</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill" style="width: 40%">12</div>
+                    </div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">Славный Малый</div>
+                    <div class="chart-bar-bg">
+                        <div class="chart-bar-fill" style="width: 30%">9</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Insights -->
+        <section class="section">
+            <h2 class="section-title">Ключевые Инсайты</h2>
+            <p class="section-subtitle">Что ваш профиль говорит о вас</p>
+            
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">⚔️</div>
+                    <h3 class="insight-title">Активная Жизненная Позиция</h3>
+                    <p class="insight-text">
+                        Ваши топ-3 архетипа (Герой, Любовник, Правитель) все относятся к категории высокоактивных. Вы не пассивный наблюдатель — вы действуете, ведёте и создаёте. Это мощная комбинация для достижения целей и влияния на мир вокруг.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">💫</div>
+                    <h3 class="insight-title">Баланс Силы и Чувств</h3>
+                    <p class="insight-text">
+                        Удивительно, что Герой и Любовник у вас на одинаковом уровне (29 баллов). Это означает, что вы способны быть одновременно сильным и нежным, решительным и чувствительным. Вы понимаете, что настоящая сила включает в себя способность любить и быть уязвимым.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">👑</div>
+                    <h3 class="insight-title">Лидерский Потенциал</h3>
+                    <p class="insight-text">
+                        Высокие показатели Правителя (28) и Героя (29) указывают на естественную способность брать ответственность и вести людей за собой. Вы не боитесь принимать решения и готовы отвечать за последствия своих действий.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">🎨</div>
+                    <h3 class="insight-title">Творческая Реализация</h3>
+                    <p class="insight-text">
+                        Творец (26 баллов) в вашем топе говорит о том, что вам важно оставить след в мире через создание чего-то нового. Вы не просто действуете — вы создаёте, воплощаете видение в реальность и стремитесь к совершенству.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">⚡</div>
+                    <h3 class="insight-title">Трансформационная Сила</h3>
+                    <p class="insight-text">
+                        Маг (23 балла) в вашем профиле показывает способность видеть возможности там, где другие видят ограничения. Вы понимаете фундаментальные законы и используете их для достижения результатов, которые кажутся другим невозможными.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">🔍</div>
+                    <h3 class="insight-title">Зоны Роста</h3>
+                    <p class="insight-text">
+                        Низкие показатели Бунтаря (12) и Славного Малого (9) показывают, что вам может не хватать способности адаптироваться к обстоятельствам и принимать несовершенство. Развитие этих архетипов поможет стать более гибким и сострадательным к себе и другим.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recommendations -->
+        <section class="section">
+            <div class="recommendations">
+                <h3>Рекомендации для Развития</h3>
+                <ul class="recommendation-list">
+                    <li>
+                        <strong>Баланс Действия и Рефлексии:</strong> При ваших высоких показателях Героя и Правителя важно не забывать делать паузы. Развивайте архетипы Мудреца и Искателя через медитацию, чтение философской литературы и путешествия для саморефлексии.
+                    </li>
+                    <li>
+                        <strong>Развитие Гибкости:</strong> Низкий Бунтарь указывает на то, что вам может быть сложно менять правила или адаптироваться, когда система не работает. Практикуйте творческое разрушение — иногда нужно сломать старое, чтобы построить новое.
+                    </li>
+                    <li>
+                        <strong>Принятие Несовершенства:</strong> Низкий показатель Славного Малого говорит о том, что вы можете быть слишком строги к себе и другим. Работайте над принятием обычности и несовершенства — не всё в жизни требует героизма и величия.
+                    </li>
+                    <li>
+                        <strong>Интеграция Любовника:</strong> Ваш высокий Любовник — это дар, но убедитесь, что вы не только стремитесь к красоте в отношениях, но и принимаете реальность повседневности. Романтика важна, но также важна и способность быть рядом в обычных моментах.
+                    </li>
+                    <li>
+                        <strong>Использование Силы Творца:</strong> С таким высоким Творцом (26) инвестируйте время в проекты, которые имеют для вас глубокое личное значение. Создавайте не только для результата, но и для процесса самовыражения.
+                    </li>
+                    <li>
+                        <strong>Развитие Архетипа Шута:</strong> При вашей серьёзной и целеустремлённой природе (Герой + Правитель), не забывайте о радости и игре. Шут (20 баллов) напоминает, что жизнь должна приносить удовольствие. Позволяйте себе быть спонтанным и несерьёзным.
+                    </li>
+                    <li>
+                        <strong>Баланс Контроля и Доверия:</strong> Высокий Правитель может привести к желанию всё контролировать. Учитесь делегировать и доверять другим. Не весь мир нуждается в вашем управлении — иногда лучшее лидерство — это дать другим пространство для роста.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Career Insights -->
+        <section class="section">
+            <h2 class="section-title">Карьерные Направления</h2>
+            <p class="section-subtitle">Профессии и роли, где вы можете максимально реализоваться</p>
+            
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">🚀</div>
+                    <h3 class="insight-title">Предпринимательство</h3>
+                    <p class="insight-text">
+                        Ваша комбинация Героя, Правителя и Творца идеальна для создания и управления собственным бизнесом. Вы способны видеть возможности, принимать риски и вести команду к цели.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">🎯</div>
+                    <h3 class="insight-title">Стратегическое Лидерство</h3>
+                    <p class="insight-text">
+                        Руководящие позиции в крупных организациях, где требуется как стратегическое мышление (Правитель), так и способность вдохновлять команду (Герой) и создавать новые решения (Творец).
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">💡</div>
+                    <h3 class="insight-title">Творческие Индустрии</h3>
+                    <p class="insight-text">
+                        Режиссура, дизайн, архитектура — области, где ваш Творец может создавать шедевры, Любовник привносить эстетику и страсть, а Правитель управлять проектами.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">🏆</div>
+                    <h3 class="insight-title">Консалтинг и Коучинг</h3>
+                    <p class="insight-text">
+                        Помощь другим в достижении их целей (Герой), трансформации (Маг) и создании структур успеха (Правитель). Ваш опыт и видение могут направлять других на путь к победе.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Relationships -->
+        <section class="section">
+            <h2 class="section-title">В Отношениях</h2>
+            <p class="section-subtitle">Как ваши архетипы влияют на личную жизнь</p>
+            
+            <div class="recommendations">
+                <ul class="recommendation-list">
+                    <li>
+                        <strong>Страсть и Защита:</strong> Высокий Любовник (29) делает вас страстным и романтичным партнёром, который ценит красоту и интимность. В сочетании с Героем вы также готовы защищать и бороться за своих любимых. Это мощная комбинация, но следите, чтобы не стать собственником.
+                    </li>
+                    <li>
+                        <strong>Потребность в Контроле:</strong> Правитель (28) может проявляться как желание организовать и контролировать отношения. Важно помнить, что партнёрство — это не проект для управления, а танец двух равных. Учитесь отпускать контроль.
+                    </li>
+                    <li>
+                        <strong>Идеализм vs Реальность:</strong> Ваш Любовник стремится к идеальным отношениям, но низкий Славный Малый показывает, что вам может быть трудно принять обыденность. Работайте над ценностью простых, повседневных моментов близости.
+                    </li>
+                    <li>
+                        <strong>Баланс Независимости:</strong> Искатель (21) в вашем профиле говорит о потребности в личном пространстве и свободе. Убедитесь, что в отношениях есть место для индивидуального роста, и не позволяйте Любовнику или Правителю полностью поглотить вас отношениями.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Shadow Work -->
+        <section class="section">
+            <h2 class="section-title">Теневые Аспекты</h2>
+            <p class="section-subtitle">Потенциальные ловушки ваших архетипов</p>
+            
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">⚠️</div>
+                    <h3 class="insight-title">Перфекционизм Героя</h3>
+                    <p class="insight-text">
+                        Тень Героя — это выгорание от постоянной борьбы и неспособность отдыхать. Вы можете ставить перед собой невозможные цели и считать отдых слабостью. Помните: даже герои нуждаются в восстановлении.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">💔</div>
+                    <h3 class="insight-title">Ревность Любовника</h3>
+                    <p class="insight-text">
+                        Тень Любовника — это ревность, одержимость и страх потери. Когда вы так сильно цените близость, вы можете стать собственником и контролировать партнёра из страха быть покинутым. Развивайте доверие и внутреннюю безопасность.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">👿</div>
+                    <h3 class="insight-title">Тирания Правителя</h3>
+                    <p class="insight-text">
+                        В худшем проявлении Правитель становится тираном — контролирующим, доминирующим и неспособным принять чужое мнение. Следите за тем, чтобы ваше желание порядка не превратилось в подавление других.
+                    </p>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-icon">🎭</div>
+                    <h3 class="insight-title">Критичность Творца</h3>
+                    <p class="insight-text">
+                        Тень Творца — это внутренний критик, который никогда не доволен результатом. Вы можете бояться показывать незавершённые работы или отказываться от проектов, которые не идеальны. Учитесь принимать процесс, а не только результат.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integration Path -->
+        <section class="section">
+            <h2 class="section-title">Путь Интеграции</h2>
+            <p class="section-subtitle">Как гармонично объединить все ваши архетипы</p>
+            
+            <div class="recommendations">
+                <h3>Практические Шаги</h3>
+                <ul class="recommendation-list">
+                    <li>
+                        <strong>Утренняя Практика Героя:</strong> Начинайте день с физической активности или визуализации целей. Это активирует вашего Героя и даёт энергию для действий. Но также включите 10 минут медитации для баланса.
+                    </li>
+                    <li>
+                        <strong>Вечерний Ритуал Любовника:</strong> Завершайте день чем-то красивым — хорошей музыкой, ужином при свечах, качественным временем с близкими. Это питает вашего Любовника и помогает переключиться из режима достижений.
+                    </li>
+                    <li>
+                        <strong>Еженедельная Рефлексия Мудреца:</strong> Раз в неделю выделяйте время для анализа: что работает, что нет, какие уроки вы извлекли. Это развивает недостаточно активного Мудреца и помогает учиться на опыте.
+                    </li>
+                    <li>
+                        <strong>Ежемесячный Выход из Зоны Комфорта (Искатель):</strong> Раз в месяц делайте что-то новое — посетите новое место, попробуйте новое хобби, познакомьтесь с новыми людьми. Это активирует Искателя и предотвращает застой.
+                    </li>
+                    <li>
+                        <strong>Практика Отпускания Контроля:</strong> Сознательно практикуйте делегирование и доверие. Начните с малого — позвольте кому-то другому выбрать ресторан, спланировать поездку, организовать встречу. Наблюдайте за своим дискомфортом и работайте с ним.
+                    </li>
+                    <li>
+                        <strong>Творческие Эксперименты:</strong> Каждую неделю создавайте что-то без цели и без оценки результата. Рисуйте, пишите, создавайте музыку — не для публикации или продажи, а просто для процесса. Это исцеляет Творца от перфекционизма.
+                    </li>
+                    <li>
+                        <strong>Практика Игривости (Шут):</strong> Регулярно делайте что-то просто для веселья, без практической цели. Играйте, шутите, будьте спонтанным. Это балансирует серьёзность Героя и Правителя.
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Этот анализ создан на основе вашего теста архетипов личности</p>
+        <p>Помните: вы — это не один архетип, а уникальная комбинация всех двенадцати</p>
+        <p style="margin-top: 2rem; color: var(--accent-gold);">✨ Познай себя — и ты познаешь мир ✨</p>
+    </footer>
+
+    <script>
+        // Анимация появления элементов при скролле
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section, .archetype-card, .insight-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
